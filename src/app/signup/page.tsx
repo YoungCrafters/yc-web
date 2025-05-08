@@ -191,7 +191,7 @@ export default function SignUpPage() {
 								</Button>
 
 								<Stack spacing={2}>
-									<Stack
+									{/* <Stack
 										direction='row'
 										alignItems='center'
 										spacing={2}
@@ -203,7 +203,7 @@ export default function SignUpPage() {
 											Or continue with
 										</Typography>
 										<Divider sx={{ flex: 1 }} />
-									</Stack>
+									</Stack> */}
 
 									{/* <Stack direction='row' spacing={2}>
 										<Button

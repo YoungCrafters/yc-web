@@ -172,7 +172,7 @@ export default function SignInPage() {
 								</Button>
 
 								<Stack spacing={2}>
-									<Stack
+									{/* <Stack
 										direction='row'
 										alignItems='center'
 										spacing={2}
@@ -184,7 +184,7 @@ export default function SignInPage() {
 											Or continue with
 										</Typography>
 										<Divider sx={{ flex: 1 }} />
-									</Stack>
+									</Stack> */}
 
 									{/* <Stack direction='row' spacing={2}>
 										<Button
@@ -211,8 +211,8 @@ export default function SignInPage() {
 										<Link
 											href='/signup'
 											style={{
-												color: 'inherit',
-												fontWeight: 500,
+												color: 'black',
+												fontWeight: 800,
 												textDecoration: 'none',
 											}}>
 											Sign up
