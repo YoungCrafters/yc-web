@@ -21,18 +21,13 @@ import {
 	Typography,
 	Alert,
 } from '@mui/material';
-import {
-	Google as GoogleIcon,
-	GitHub as GitHubIcon,
-	Construction as ConstructionIcon,
-} from '@mui/icons-material';
+import { Construction as ConstructionIcon } from '@mui/icons-material';
 
 export default function SignInPage() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const message = searchParams.get('message');
 	const [alertMessage, setAlertMessage] = useState<string | null>(null);
-
 
 	const { signIn, isLoading, error, isAuthenticated, user } = useAuth();
 
@@ -46,11 +41,11 @@ export default function SignInPage() {
 		resolver: zodResolver(signInSchema),
 	});
 
-    useEffect(() => {
-        if (message === 'check-email') {
-            setAlertMessage('Please check your email for a confirmation link.');
-        }
-    }, [message]);
+	useEffect(() => {
+		if (message === 'check-email') {
+			setAlertMessage('Please check your email for a confirmation link.');
+		}
+	}, [message]);
 
 	useEffect(() => {
 		if (isAuthenticated && user) {
@@ -63,9 +58,8 @@ export default function SignInPage() {
 	}, [isAuthenticated, user, router]);
 
 	const onSubmit = async (data: SignInFormData) => {
-
 		const result: AuthResponse = await useLogin(data);
-		console.log(result.user)
+		console.log(result.user);
 		if (result.user) {
 			setAlertMessage(null);
 			router.push('/mentor/dashboard');
@@ -98,23 +92,22 @@ export default function SignInPage() {
 			}}>
 			<Container maxWidth='xs'>
 				{alertMessage && (
-                <div
-                    style={{
-                        backgroundColor: '#f0f4c3',
-                        color: '#33691e',
-                        padding: '10px',
-                        textAlign: 'center',
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        zIndex: 1000,
-                        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-                    }}
-                >
-                    {alertMessage}
-                </div>
-            	)}
+					<div
+						style={{
+							backgroundColor: '#f0f4c3',
+							color: '#33691e',
+							padding: '10px',
+							textAlign: 'center',
+							position: 'fixed',
+							top: 0,
+							left: 0,
+							right: 0,
+							zIndex: 1000,
+							boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+						}}>
+						{alertMessage}
+					</div>
+				)}
 				<Card
 					elevation={0}
 					sx={{
@@ -193,7 +186,7 @@ export default function SignInPage() {
 										<Divider sx={{ flex: 1 }} />
 									</Stack>
 
-									<Stack direction='row' spacing={2}>
+									{/* <Stack direction='row' spacing={2}>
 										<Button
 											fullWidth
 											variant='outlined'
@@ -208,7 +201,7 @@ export default function SignInPage() {
 											sx={{ py: 1.5 }}>
 											GitHub
 										</Button>
-									</Stack>
+									</Stack> */}
 
 									<Typography
 										variant='body2'
