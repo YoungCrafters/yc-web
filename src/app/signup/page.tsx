@@ -1,13 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { SignInFormData, UserType, signInSchema } from '@/types/auth';
-import { useLogin, AuthResponse } from '../app/api/services/authService';
-import { useAuth } from '@/hooks/useAuth';
+import { SignUpFormData, signUpSchema } from '@/types/auth';
+import { useRegister, RegistrationUserData } from '../api/services/authService';
 import {
 	Box,
 	Button,
@@ -17,63 +16,49 @@ import {
 	Container,
 	Divider,
 	Stack,
+	Grid,
 	TextField,
 	Typography,
-	Alert,
 } from '@mui/material';
-import {
-	Google as GoogleIcon,
-	GitHub as GitHubIcon,
-	Construction as ConstructionIcon,
-} from '@mui/icons-material';
+import GoogleIcon from '@mui/icons-material/Google';
+import GitHubIcon from '@mui/icons-material/Github';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
-export default function SignInPage() {
-	const router = useRouter();
-	const searchParams = useSearchParams();
-	const message = searchParams.get('message');
-	const [alertMessage, setAlertMessage] = useState<string | null>(null);
-
-
-	const { signIn, isLoading, error, isAuthenticated, user } = useAuth();
+export default function SignUpPage() {
+	const router = useRouter(); // Use Next.js router
+	const [isLoading, setIsLoading] = useState(false);
 
 	const {
 		register,
 		handleSubmit,
-		watch,
-		setValue,
 		formState: { errors },
-	} = useForm<SignInFormData>({
-		resolver: zodResolver(signInSchema),
+	} = useForm<SignUpFormData>({
+		resolver: zodResolver(signUpSchema),
 	});
 
-    useEffect(() => {
-        if (message === 'check-email') {
-            setAlertMessage('Please check your email for a confirmation link.');
-        }
-    }, [message]);
+	const onSubmit = async (form: SignUpFormData) => {
+		setIsLoading(true);
+		try {
+			const userData: RegistrationUserData = {
+				...form,
+				first_name: form.firstName,
+				last_name: form.lastName,
+				password1: form.password,
+				password2: form.confirmPassword,
+			};
 
-	useEffect(() => {
-		if (isAuthenticated && user) {
-			if (user.userType === UserType.MENTOR) {
-				router.push('/mentor/dashboard');
+			const response = await useRegister(userData);
+
+			if (response.detail) {
+				console.log('Registration successful:', response.detail);
+				router.push('/?message=check-email'); // Navigate to the sign-in page
 			} else {
-				router.push('/mentee/dashboard');
+				console.error('Registration failed:');
 			}
-		}
-	}, [isAuthenticated, user, router]);
-
-	const onSubmit = async (data: SignInFormData) => {
-
-		const result: AuthResponse = await useLogin(data);
-		console.log(result.user)
-		if (result.user) {
-			setAlertMessage(null);
-			router.push('/mentor/dashboard');
-			// if (user?.userType === UserType.MENTOR) {
-			// 	router.push('/mentor/dashboard');
-			// } else {
-			// 	router.push('/mentee/dashboard');
-			// }
+		} catch (error) {
+			console.error('Error during registration:', error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -95,26 +80,21 @@ export default function SignInPage() {
 						'radial-gradient(45rem 50rem at top, #f4f4f5, transparent)',
 					zIndex: -1,
 				},
+				'&::after': {
+					content: '""',
+					position: 'absolute',
+					insetY: 0,
+					right: '50%',
+					width: '200%',
+					transform: 'skewX(-30deg)',
+					transformOrigin: 'bottom left',
+					background: 'rgba(255, 255, 255, 0.8)',
+					boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+					border: '1px solid rgba(0, 0, 0, 0.05)',
+					zIndex: -1,
+				},
 			}}>
 			<Container maxWidth='xs'>
-				{alertMessage && (
-                <div
-                    style={{
-                        backgroundColor: '#f0f4c3',
-                        color: '#33691e',
-                        padding: '10px',
-                        textAlign: 'center',
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        zIndex: 1000,
-                        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-                    }}
-                >
-                    {alertMessage}
-                </div>
-            	)}
 				<Card
 					elevation={0}
 					sx={{
@@ -133,10 +113,10 @@ export default function SignInPage() {
 									Young Crafter
 								</Typography>
 								<Typography variant='subtitle1' fontWeight='medium'>
-									Welcome Back
+									Join the Community
 								</Typography>
 								<Typography variant='body2' color='text.secondary'>
-									Sign in to continue your journey
+									Create an account to start your journey
 								</Typography>
 							</Stack>
 						}
@@ -144,11 +124,24 @@ export default function SignInPage() {
 					<CardContent>
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<Stack spacing={2.5}>
-								{error && (
-									<Alert severity='error' variant='outlined'>
-										{error}
-									</Alert>
-								)}
+								<Grid container direction='row' justifyContent='space-between'>
+									<TextField
+										sx={{ width: '48%' }}
+										label='First Name'
+										error={!!errors.firstName}
+										helperText={errors.firstName?.message}
+										disabled={isLoading}
+										{...register('firstName')}
+									/>
+									<TextField
+										sx={{ width: '48%' }}
+										label='Last Name'
+										error={!!errors.lastName}
+										helperText={errors.lastName?.message}
+										disabled={isLoading}
+										{...register('lastName')}
+									/>
+								</Grid>
 
 								<TextField
 									fullWidth
@@ -157,6 +150,15 @@ export default function SignInPage() {
 									helperText={errors.username?.message}
 									disabled={isLoading}
 									{...register('username')}
+								/>
+								<TextField
+									fullWidth
+									label='Email'
+									type='email'
+									error={!!errors.email}
+									helperText={errors.email?.message}
+									disabled={isLoading}
+									{...register('email')}
 								/>
 
 								<TextField
@@ -169,13 +171,23 @@ export default function SignInPage() {
 									{...register('password')}
 								/>
 
+								<TextField
+									fullWidth
+									label='Confirm Password'
+									type='password'
+									error={!!errors.confirmPassword}
+									helperText={errors.confirmPassword?.message}
+									disabled={isLoading}
+									{...register('confirmPassword')}
+								/>
+
 								<Button
 									type='submit'
 									variant='contained'
 									size='large'
 									disabled={isLoading}
 									sx={{ py: 1.5 }}>
-									{isLoading ? 'Signing in...' : 'Sign in'}
+									{isLoading ? 'Creating account...' : 'Create account'}
 								</Button>
 
 								<Stack spacing={2}>
@@ -214,15 +226,15 @@ export default function SignInPage() {
 										variant='body2'
 										align='center'
 										sx={{ color: 'text.secondary' }}>
-										Don't have an account?{' '}
+										Already have an account?{' '}
 										<Link
-											href='/signup'
+											href='/'
 											style={{
 												color: 'inherit',
 												fontWeight: 500,
 												textDecoration: 'none',
 											}}>
-											Sign up
+											Sign in
 										</Link>
 									</Typography>
 								</Stack>
