@@ -20,8 +20,8 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
-import GitHubIcon from '@mui/icons-material/Github';
+// import GoogleIcon from '@mui/icons-material/Google';
+// import GitHubIcon from '@mui/icons-material/Github';
 import ConstructionIcon from '@mui/icons-material/Construction';
 
 export default function SignUpPage() {
@@ -205,7 +205,7 @@ export default function SignUpPage() {
 										<Divider sx={{ flex: 1 }} />
 									</Stack>
 
-									<Stack direction='row' spacing={2}>
+									{/* <Stack direction='row' spacing={2}>
 										<Button
 											fullWidth
 											variant='outlined'
@@ -220,7 +220,7 @@ export default function SignUpPage() {
 											sx={{ py: 1.5 }}>
 											GitHub
 										</Button>
-									</Stack>
+									</Stack> */}
 
 									<Typography
 										variant='body2'
