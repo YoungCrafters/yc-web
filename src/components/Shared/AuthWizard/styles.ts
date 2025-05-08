@@ -1,7 +1,5 @@
-import { cva } from 'class-variance-authority'
 
-export const authWizardVariants = cva(
-  'w-full max-w-md mx-auto p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800',
+export const authWizardVariants = (
   {
     variants: {
       variant: {

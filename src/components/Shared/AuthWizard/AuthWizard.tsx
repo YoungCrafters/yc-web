@@ -58,7 +58,7 @@ export function AuthWizard({
 	};
 
 	return (
-		<div className={authWizardVariants({ className })}>
+		<div>
 			<div className='space-y-6'>
 				{currentStep === AUTH_STEPS.LOGIN && (
 					<form onSubmit={handleLoginSubmit(onLogin)} className='space-y-4'>
