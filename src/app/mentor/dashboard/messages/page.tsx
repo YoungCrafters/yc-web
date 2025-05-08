@@ -19,10 +19,7 @@ import {
 	Paper,
 	InputAdornment,
 } from '@mui/material';
-import {
-	Send as SendIcon,
-	Search as SearchIcon,
-} from '@mui/icons-material';
+import { Send as SendIcon, Search as SearchIcon } from '@mui/icons-material';
 import MentorLayout from '@/components/Layout/MentorLayout';
 
 // Mock data for conversations
@@ -82,7 +79,7 @@ const mockMessages = [
 	{
 		id: '2',
 		senderId: 'mentee',
-		text: 'I've completed most of it, but I'm having trouble with hooks.',
+		text: "I've completed most of it, but I'm having trouble with hooks.",
 		timestamp: '2024-03-24T10:15:00',
 	},
 	{
@@ -107,9 +104,7 @@ export default function MessagesPage() {
 	const [newMessage, setNewMessage] = useState('');
 
 	const filteredConversations = mockConversations.filter((conversation) =>
-		conversation.mentee.name
-			.toLowerCase()
-			.includes(searchQuery.toLowerCase())
+		conversation.mentee.name.toLowerCase().includes(searchQuery.toLowerCase())
 	);
 
 	const handleSendMessage = () => {
@@ -183,9 +178,7 @@ export default function MessagesPage() {
 												)
 											}>
 											<ListItemButton
-												selected={
-													selectedConversation.id === conversation.id
-												}
+												selected={selectedConversation.id === conversation.id}
 												onClick={() => setSelectedConversation(conversation)}>
 												<ListItemAvatar>
 													<Avatar
@@ -197,8 +190,9 @@ export default function MessagesPage() {
 													primary={conversation.mentee.name}
 													secondary={conversation.lastMessage.text}
 													primaryTypographyProps={{
-														fontWeight:
-															conversation.lastMessage.unread ? 'bold' : 'normal',
+														fontWeight: conversation.lastMessage.unread
+															? 'bold'
+															: 'normal',
 													}}
 													secondaryTypographyProps={{
 														noWrap: true,
@@ -225,9 +219,7 @@ export default function MessagesPage() {
 											<Typography variant='subtitle1'>
 												{selectedConversation.mentee.name}
 											</Typography>
-											<Typography
-												variant='body2'
-												color='text.secondary'>
+											<Typography variant='body2' color='text.secondary'>
 												{selectedConversation.mentee.lastActive}
 											</Typography>
 										</Box>
@@ -309,4 +301,4 @@ export default function MessagesPage() {
 			</Box>
 		</MentorLayout>
 	);
-} 
+}
